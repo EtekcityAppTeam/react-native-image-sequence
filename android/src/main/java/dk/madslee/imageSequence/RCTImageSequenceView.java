@@ -72,7 +72,7 @@ public class RCTImageSequenceView extends ImageView {
         protected Bitmap doInBackground(String... params) {
             if (this.uri.startsWith("http")) {
                 try {
-                    return Glide.with(this.context).load(this.uri).asBitmap().into(mWith, mHeight).get();
+                    return Glide.with(this.context).asBitmap().load(this.uri).into(mWith, mHeight).get();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {
@@ -86,7 +86,7 @@ public class RCTImageSequenceView extends ImageView {
 
         private Bitmap loadBitmapByLocalResource(String uri) {
             try {
-                return Glide.with(this.context).load(resourceDrawableIdHelper.getResourceDrawableId(this.context, uri)).asBitmap().into(mWith, mHeight).get();
+                return Glide.with(this.context).asBitmap().load(resourceDrawableIdHelper.getResourceDrawableId(this.context, uri)).into(mWith, mHeight).get();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -156,7 +156,7 @@ public class RCTImageSequenceView extends ImageView {
 
                 mWith = getWidth();
                 mHeight = getHeight();
-                
+
                 if (mWith==0){
                     mWith=700;
                 }
