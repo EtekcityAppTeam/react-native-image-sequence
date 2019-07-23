@@ -76,6 +76,7 @@
 
     if (self.animationImages.count > 0) {
         self.animationDuration = self.animationImages.count * (1.0f / _framesPerSecond);
+        [self startAnimating];
     }
 }
 
