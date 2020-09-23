@@ -5,24 +5,21 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.annotation.Nullable;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.os.AsyncTask;
-import android.widget.ImageView;
-
+import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.RejectedExecutionException;
 
 
-public class RCTImageSequenceView extends ImageView {
+public class RCTImageSequenceView extends androidx.appcompat.widget.AppCompatImageView {
+
     private Integer framesPerSecond = 24;
     private Boolean loop = true;
     private Boolean isAnim = false;
@@ -58,6 +55,7 @@ public class RCTImageSequenceView extends ImageView {
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+
         private final Integer index;
         private final String uri;
         private final Context context;
@@ -72,7 +70,8 @@ public class RCTImageSequenceView extends ImageView {
         protected Bitmap doInBackground(String... params) {
             if (this.uri.startsWith("http")) {
                 try {
-                    return Glide.with(this.context).asBitmap().load(this.uri).into(mWith, mHeight).get();
+                    return Glide.with(this.context).asBitmap().load(this.uri).into(mWith, mHeight)
+                            .get();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {
@@ -86,7 +85,9 @@ public class RCTImageSequenceView extends ImageView {
 
         private Bitmap loadBitmapByLocalResource(String uri) {
             try {
-                return Glide.with(this.context).asBitmap().load(resourceDrawableIdHelper.getResourceDrawableId(this.context, uri)).into(mWith, mHeight).get();
+                return Glide.with(this.context).asBitmap()
+                        .load(resourceDrawableIdHelper.getResourceDrawableId(this.context, uri))
+                        .into(mWith, mHeight).get();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -125,7 +126,8 @@ public class RCTImageSequenceView extends ImageView {
         }
     }
 
-    private void onTaskCompleted(DownloadImageTask downloadImageTask, Integer index, Bitmap bitmap) {
+    private void onTaskCompleted(DownloadImageTask downloadImageTask, Integer index,
+            Bitmap bitmap) {
         if (index == 0) {
             // first image should be displayed as soon as possible.
             this.setImageBitmap(bitmap);
@@ -157,15 +159,16 @@ public class RCTImageSequenceView extends ImageView {
                 mWith = getWidth();
                 mHeight = getHeight();
 
-                if (mWith==0){
-                    mWith=700;
+                if (mWith == 0) {
+                    mWith = 700;
                 }
-                if (mHeight==0){
-                    mHeight=700;
+                if (mHeight == 0) {
+                    mHeight = 700;
                 }
 
                 for (int index = 0; index < uris.size(); index++) {
-                    DownloadImageTask task = new DownloadImageTask(index, uris.get(index), getContext());
+                    DownloadImageTask task = new DownloadImageTask(index, uris.get(index),
+                            getContext());
                     activeTasks.add(task);
                     try {
                         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
